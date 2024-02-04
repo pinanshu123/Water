@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="with=device-width, initial-scale=1.0">
+        <title>AquaWatchTower</title>
+            <link rel="Stylesheet" href="Static/Style.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css">
+    </head>
+    <body>
+        <div class="background">
+            <div class="content">
+        <section class="header">
+            <nav>
+                <a href =""><img src="Static/Images/Logo.png"></a>
+                <div class="nav-links">
+                    <i class="fa fa-times"></i>
+                    <ul>
+                        <li><a href="">HOME</a></li>
+                        <li><a href="about.html">ABOUT</a></li>
+                        <li><a href="#" onclick="showdialog('<a href=\'regulatory.html\' style =\'text-decoration:none;color:#ffffff\'>Regulatory-Standards</a><br><br><a href=\'who.html\' style =\'text-decoration:none;color:#ffffff\'>WHO-Guidelines</a><br><br><a href=\'indian.html\' style =\'text-decoration:none;color:#ffffff\'>Indian-Standards</a>')">REGULATORY STANDARDS</a></li>
+                        <li><a href="vis.html">VISUALIZATIONS</a></li>
+                        <li><a href="">LIVE TRACKING</a></li>
+                    </ul>
+                </div>
+                <i class="fa fa-bars"></i>
+            </nav>
+            <div class="text-box">
+                <h1>SAFE DRINKING WATER FOR ALL</h1>
+                <p>Clean water is not just a source of life; 
+                   it's the cornerstone of thriving ecosystems, human health, 
+                   and sustainable development,<br> underscoring the vital need for 
+                   its preservation and accessibility worldwide.                    
+                </p>
+                <a href="dive.html" class="hero-btn">Dive into Clarity</a>
+            </div>
+            <div class="contact">
+                <h3> Contact Info </h3>
+                <p>&#128100; &nbsp; Pinanshu Surve &nbsp; &nbsp; &nbsp; &#x260E; &nbsp; +91 7738067720 &nbsp; &nbsp; &nbsp; &#9993; &nbsp; pinanshu1234@gmail.com </p>
+                </div>
+        </section>
+        
+        <section class="footer"> 
+            
+            
+        </section>
+    </div>
+    </div>
+    <script>
+       function showdialog(text){
+        const dialogBox = document.createElement('div');
+        dialogBox.className = 'dialogbox';
+        dialogBox.innerHTML = text;
+        dialogBox.style.fontWeight = 'bold';
+        dialogBox.style.fontSize = '21px';
+        dialogBox.style.fontFamily = 'Garamond;'
+        dialogBox.style.fontWeight = 'bold';
+        dialogBox.style.position = 'fixed';
+        dialogBox.style.top = '50%';
+        dialogBox.style.left = '50%';
+        dialogBox.style.transform = 'translate(-50%, -50%)';
+        dialogBox.style.padding = '20px';
+        dialogBox.style.border = '1px black solid ';
+        dialogBox.style.zIndex = '9999';
+        dialogBox.style.background = '#041E42';
+        dialogBox.style.textAlign = 'justify'
+        document.body.appendChild(dialogBox);
+        dialogBox.addEventListener('click', function(){
+            document.body.removeChild(dialogBox);
+
+        });
+       }
+    </script>
+    </body>
+</html>

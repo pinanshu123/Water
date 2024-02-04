@@ -1,0 +1,22 @@
+body{
+    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(Images/Dive.png);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.container{
+    padding: 0px 50px 0px 50px;
+}
+.what, .bene, .team{
+    color: rgb(11, 248, 248);
+}
+.water, .benefits{
+    color: antiquewhite;
+    text-align: justify;
+    font-size: 18px;
+}
+.mem{
+    color: bisque;
+    font-size: 30px;
+    font-weight: bold;
+}

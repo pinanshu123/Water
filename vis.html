@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="with=device-width, initial-scale=1.0">
+        <title>AquaWatchTower</title>
+            <link rel="Stylesheet" href="Static/graph.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body> 
+        <h1 class = "head"> Dashboard
+        </h1>
+        <div class = "container">
+            <div class = "upload">
+                <form id ="csvform" enctype ="multipart/form-data" action = "sent" method = "post">
+                    {% csrf_token %}
+                <label style ="color: antiquewhite; font-weight: bolder; font-size: 21px" for = "fileinput"> Upload your csv file: 
+                </label> &nbsp; &nbsp; &nbsp;
+                <input style ="color: antiquewhite; font-weight: bold; font-size: 19px" type ="file" id ="fileinput" accept =".csv" required name ="csv_file" ><br>
+                <button type = "submit" onclick ="handlefileupload()" style="margin-left: 217px; margin-top: 20px; font-size: 20px; color: antiquewhite; background-color: black"> Upload
+                </button>
+            </form>
+            <div class="tdiv" style="width: 500px; height: 350px">
+                <canvas id="turbidityChart"></canvas>
+            </div>
+            </div>
+            <div class = "filter">
+                <div class="tdiv" style="width: 500px;height: 350px">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+                <div class="tdiv" style="width: 500px; height: 350px">
+                    <canvas id="pHChart"></canvas>
+                </div>
+            </div> 
+        </div>
+        <script>
+            var turbidityChart;
+            var temperatureChart;
+            var pHChart;
+
+            function createCharts(data) {
+                var dates = data.map(function (entry) {
+                    return entry.fields.timestamp;
+                });
+                var turbidityData = data.map(function (entry) {
+                    return entry.fields.turbidity;
+                });
+                var temperatureData = data.map(function (entry) {
+                    return entry.fields.temperature;
+                });
+                var pHData = data.map(function (entry) {
+                    return entry.fields.pH;
+                });
+            
+                if (!turbidityChart) {
+                    var turbidityCtx = document.getElementById('turbidityChart').getContext('2d');
+                    turbidityChart = new Chart(turbidityCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'Turbidity (NTU)',
+                                data: turbidityData,
+                                borderColor: 'aqua',
+                                fill: false
+                                
+                            },  
+                            {
+                                label: 'Permissible limit 500',
+                                data: Array(dates.length).fill(500), 
+                                borderColor: 'white',
+                                borderWidth: 0.7,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                } else {
+                    turbidityChart.data.labels = dates;
+                    turbidityChart.data.datasets[0].data = turbidityData;
+                    turbidityChart.update();
+                }
+                if (!temperatureChart) {
+                    var temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+                    temperatureChart = new Chart(temperatureCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'Temperature (°C)',
+                                data: temperatureData,
+                                borderColor: 'yellow',
+                                fill: false
+                            },
+                            {
+                                label: 'Lower limit',
+                                data: Array(dates.length).fill(25), 
+                                borderColor: 'white',
+                                borderWidth: 0.7,
+                                fill: false
+                            },
+                            {
+                                label: 'Upper limit',
+                                data: Array(dates.length).fill(45), 
+                                borderColor: 'white',
+                                borderWidth: 0.7,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,                              
+                            }                        
+                    });
+                } else {
+                    temperatureChart.data.labels = dates;
+                    temperatureChart.data.datasets[0].data = temperatureData;
+                    temperatureChart.update();
+                }
+                if (!pHChart) {
+                    var pHCtx = document.getElementById('pHChart').getContext('2d');
+                    pHChart = new Chart(pHCtx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'pH',
+                                data: pHData,
+                                borderColor: 'red',
+                                fill: false
+                            },
+                            {
+                                label: 'Permissible limit 7',
+                                data: Array(dates.length).fill(7), 
+                                borderColor: 'white',
+                                borderWidth: 0.7,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                } else {
+                    pHChart.data.labels = dates;
+                    pHChart.data.datasets[0].data = pHData;
+                    pHChart.update();
+                }
+
+            }
+            
+            function updateData() {
+                $.ajax({
+                    url: '/update_data/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        var jsondata = response.data
+                        console.log(JSON.parse(jsondata))
+                        createCharts(JSON.parse(jsondata));
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error);
+                    }
+                });
+            }
+            
+            setInterval(updateData, 60000);
+            updateData();
+        </script>
+    </body>
+    </html>
